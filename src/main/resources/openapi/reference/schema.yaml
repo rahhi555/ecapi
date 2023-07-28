@@ -1,0 +1,26 @@
+openapi: 3.0.0
+x-stoplight:
+  id: 6qchn1idys5bx
+info:
+  title: PRUM EC APIスキーマ
+  version: '1.0'
+  description: PRUM ECのAPIスキーマです
+  contact: 
+    name: rahhi555
+servers:
+  - url: 'http://localhost:8080'
+tags:
+  - name: opts
+    description: 運用監視関連のAPI
+paths:
+  /health:
+    get:
+      tags:
+        - opts
+      summary: ヘルスチェック
+      responses:
+        '200':
+          description: OK
+      operationId: healthCheck
+      description: ヘルスチェック
+
