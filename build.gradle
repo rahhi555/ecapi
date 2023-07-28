@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.1.2'
 	id 'io.spring.dependency-management' version '1.1.2'
+	id "org.openapi.generator" version "6.6.0"
 }
 
 group = 'com.example'
@@ -26,6 +27,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.flywaydb:flyway-core'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2'
+	implementation 'io.swagger.core.v3:swagger-annotations:2.2.15'
+	implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.h2database:h2'
@@ -40,3 +43,19 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+openApiGenerate {
+	generatorName.set("spring")
+	inputSpec.set("$rootDir/src/main/resources/openapi/reference/schema.yaml")
+	outputDir.set("$buildDir/spring")
+	apiPackage.set("com.example.ecapi.controller")
+	modelPackage.set("com.example.ecapi.model")
+	configOptions.set([
+			interfaceOnly: "true",
+			useSpringBoot3: "true"
+	])
+}
+
+sourceSets.main.java.srcDir "$buildDir/spring/src/main/java"
+
+compileJava.dependsOn tasks.openApiGenerate
