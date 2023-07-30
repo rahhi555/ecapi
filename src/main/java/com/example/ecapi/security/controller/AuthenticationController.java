@@ -1,12 +1,15 @@
 package com.example.ecapi.security.controller;
 
+import com.example.ecapi.controller.AuthApi;
+import com.example.ecapi.model.DTOAuthentication;
+import com.example.ecapi.model.FormAuthenticate;
+import com.example.ecapi.model.FormRegister;
 import com.example.ecapi.security.service.AuthenticationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
-public class AuthenticationController {
+public class AuthenticationController implements AuthApi {
 
     private final AuthenticationService service;
 
@@ -14,17 +17,14 @@ public class AuthenticationController {
         this.service = service;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(
-        @RequestBody RegisterRequest request
-    ) {
-        return ResponseEntity.ok(service.register(request));
+
+    @Override
+    public ResponseEntity<DTOAuthentication> authRegister(FormRegister formRegister) {
+        return ResponseEntity.ok(service.register(formRegister));
     }
 
-    @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> register(
-        @RequestBody AuthenticationRequest request
-    ) {
-        return ResponseEntity.ok(service.authenticate(request));
+    @Override
+    public ResponseEntity<DTOAuthentication> login(FormAuthenticate formAuthenticate) {
+        return ResponseEntity.ok(service.authenticate(formAuthenticate));
     }
 }

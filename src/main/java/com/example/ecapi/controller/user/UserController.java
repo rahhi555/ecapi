@@ -1,7 +1,8 @@
 package com.example.ecapi.controller.user;
 
 import com.example.ecapi.controller.UsersApi;
-import com.example.ecapi.model.UserDTO;
+import com.example.ecapi.model.DTOUser;
+import com.example.ecapi.model.EnumRole;
 import com.example.ecapi.security.User;
 import com.example.ecapi.security.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
@@ -20,33 +21,33 @@ public class UserController implements UsersApi {
     }
 
     @Override
-    public ResponseEntity<UserDTO> getUser(Integer id) {
+    public ResponseEntity<DTOUser> getUser(Integer id) {
         User user =
                 repository
                         .findById(id)
                         .orElseThrow(() -> new UserIdNotFoundException("User Not Found"));
-        UserDTO userDTO = new UserDTO(
+        DTOUser DTOUser = new DTOUser(
                 user.getId(),
                 user.getFirstname(),
                 user.getLastname(),
                 user.getEmail(),
-                UserDTO.RoleEnum.valueOf(user.getRole().name())
+                EnumRole.valueOf(user.getRole().name())
         );
 
-        return ResponseEntity.ok(userDTO);
+        return ResponseEntity.ok(DTOUser);
     }
 
     @GetMapping("/users/me")
-    public ResponseEntity<UserDTO> me() {
+    public ResponseEntity<DTOUser> me() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        UserDTO userDTO = new UserDTO(
+        DTOUser DTOUser = new DTOUser(
                 user.getId(),
                 user.getFirstname(),
                 user.getLastname(),
                 user.getEmail(),
-                UserDTO.RoleEnum.valueOf(user.getRole().name())
+                EnumRole.valueOf(user.getRole().name())
         );
-        return ResponseEntity.ok(userDTO);
+        return ResponseEntity.ok(DTOUser);
     }
 }

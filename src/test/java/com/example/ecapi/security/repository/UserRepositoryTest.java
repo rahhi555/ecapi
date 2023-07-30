@@ -3,7 +3,7 @@ package com.example.ecapi.security.repository;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.example.ecapi.security.Role;
+import com.example.ecapi.model.EnumRole;
 import com.example.ecapi.security.User;
 
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,7 @@ public class UserRepositoryTest {
                         .password("password")
                         .firstname("newFirstName")
                         .lastname("newLastName")
-                        .role(Role.VENDOR)
+                        .role(EnumRole.VENDOR)
                         .build();
         userRepository.save(newUser);
         Optional<User> user = userRepository.findById(newUser.getId());
@@ -64,7 +64,7 @@ public class UserRepositoryTest {
                 .build();
         userRepository.save(newUser);
         Optional<User> user = userRepository.findById(newUser.getId());
-        assertThat(user.get().getRole()).isEqualTo(Role.CUSTOMER);
+        assertThat(user.get().getRole()).isEqualTo(EnumRole.CUSTOMER);
     }
 
     @Test

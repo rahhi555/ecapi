@@ -14,18 +14,20 @@ tags:
     description: 運用監視関連のAPI
   - name: users
     description: ユーザー関連のAPI
+  - name: auth
+    description: 認証関連のAPI
 paths:
   /health:
     get:
       tags:
         - opts
       summary: ヘルスチェック
+      operationId: healthCheck
+      description: ヘルスチェック
       responses:
         '200':
           description: OK
-      operationId: healthCheck
-      description: ヘルスチェック
-  /users/{id}:
+  '/users/{id}':
     parameters:
       - schema:
           type: integer
@@ -37,21 +39,59 @@ paths:
       summary: ユーザー取得
       tags:
         - users
+      operationId: getUser
+      description: idからユーザーを取得する
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserDTO'
-      operationId: getUser
-      description: idからユーザーを取得する
+                $ref: '#/components/schemas/DTOUser'
+  /auth/register:
+    post:
+      summary: ユーザー登録
+      tags:
+        - auth
+      operationId: authRegister
+      description: ユーザー登録する
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FormRegister'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DTOAuthentication'
+  /auth/authenticate:
+    post:
+      summary: ログイン
+      operationId: login
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DTOAuthentication'
+      tags:
+        - auth
+      description: ログイン
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FormAuthenticate'
 components:
   schemas:
-    UserDTO:
-      title: UserDTO
+    DTOUser:
+      title: DTOUser
       x-stoplight:
-        id: 828a4c1d103a6
+        id: 9b10079769aaa
       type: object
       description: ユーザー情報
       properties:
@@ -75,15 +115,89 @@ components:
           example: test@example.com
           format: email
         role:
-          type: string
-          description: 権限
-          example: VENDOR
-          enum:
-            - VENDOR
-            - CUSTOMER
+          $ref: '#/components/schemas/EnumRole'
       required:
         - id
         - firstname
         - lastname
         - email
         - role
+    DTOAuthentication:
+      title: DTOAuthentication
+      description: 認証jwt
+      type: object
+      properties:
+        token:
+          type: string
+          description: 認証jwt
+          example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2ZW5kb3JAZXhhbXBsZS5jb20iLCJpYXQiOjE2OTA3MjAyNjUsImV4cCI6MTY5MDcyMTcwNX0.OG9PfPsWsnqgqu-HDA5tGtXZd98UgMayrpq6ObBbSNA
+      required:
+        - token
+      x-stoplight:
+        id: 0aff6be78e7e3
+    FormRegister:
+      title: FormRegister
+      x-stoplight:
+        id: 02be447f649a0
+      type: object
+      description: ユーザー登録フォーム
+      properties:
+        email:
+          type: string
+          format: email
+          example: test@example.com
+          description: メールアドレス
+        password:
+          type: string
+          format: password
+          example: password
+          description: パスワード
+        firstname:
+          type: string
+          example: 太郎
+          minLength: 1
+          description: 名前
+        lastname:
+          type: string
+          example: 田中
+          minLength: 1
+          description: 名字
+        role:
+          $ref: '#/components/schemas/EnumRole'
+      required:
+        - email
+        - password
+        - firstname
+        - lastname
+        - role
+    FormAuthenticate:
+      title: FormAuthenticate
+      x-stoplight:
+        id: jfx7vquhdpnwn
+      type: object
+      description: ユーザーログインフォーム
+      properties:
+        email:
+          type: string
+          format: email
+          example: test@example.com
+          description: メールアドレス
+        password:
+          type: string
+          format: password
+          example: password
+          description: パスワード
+      required:
+        - email
+        - password
+    EnumRole:
+      title: EnumRole
+      x-stoplight:
+        id: b30130640ee35
+      type: string
+      enum:
+        - VENDOR
+        - CUSTOMER
+      default: CUSTOMER
+      example: VENDOR
+      description: 'ユーザー権限(販売者:VENDOR,購入者:CUSTOMER)'

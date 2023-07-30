@@ -4,7 +4,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.assertj.core.api.Assertions.*;
 
-import com.example.ecapi.security.Role;
+import com.example.ecapi.model.EnumRole;
+import com.example.ecapi.model.FormRegister;
 import com.example.ecapi.security.User;
 import com.example.ecapi.security.repository.UserRepository;
 import com.example.ecapi.security.service.AuthenticationService;
@@ -40,13 +41,7 @@ public class AuthenticationControllerTest {
         Optional<User> emptyUser = userRepository.findByEmail("new-user@example.com");
         assertThat(emptyUser.isEmpty()).isEqualTo(true);
 
-        RegisterRequest req = RegisterRequest.builder()
-                .email("new-user@example.com")
-                .password("password")
-                .firstname("newFirstName")
-                .lastname("newLastName")
-                .role(Role.VENDOR)
-                .build();
+        FormRegister req = new FormRegister("new-user@example.com", "password", "newFirstName", "newLastName", EnumRole.VENDOR);
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(req);
         mockMvc.perform(

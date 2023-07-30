@@ -1,5 +1,6 @@
 package com.example.ecapi.security;
 
+import com.example.ecapi.model.EnumRole;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,7 +20,7 @@ public class User implements UserDetails {
     private String password;
     private boolean enabled;
     @Builder.Default
-    private Role role = Role.CUSTOMER;
+    private EnumRole role = EnumRole.CUSTOMER;
 
 
     @Override

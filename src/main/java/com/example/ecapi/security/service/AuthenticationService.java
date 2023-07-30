@@ -1,9 +1,12 @@
 package com.example.ecapi.security.service;
 
+import com.example.ecapi.model.DTOAuthentication;
+import com.example.ecapi.model.EnumRole;
+import com.example.ecapi.model.FormAuthenticate;
+import com.example.ecapi.model.FormRegister;
 import com.example.ecapi.security.*;
 import com.example.ecapi.security.controller.AuthenticationRequest;
 import com.example.ecapi.security.controller.AuthenticationResponse;
-import com.example.ecapi.security.controller.RegisterRequest;
 import com.example.ecapi.security.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,7 +27,7 @@ public class AuthenticationService {
         this.authenticationManager = authenticationManager;
     }
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public DTOAuthentication register(FormRegister request) {
         User user = User.builder()
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
@@ -34,12 +37,10 @@ public class AuthenticationService {
                 .build();
         repository.save(user);
         String jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+        return new DTOAuthentication(jwtToken);
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public DTOAuthentication authenticate(FormAuthenticate request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -49,9 +50,7 @@ public class AuthenticationService {
         User user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
         String jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+        return new DTOAuthentication(jwtToken);
     }
 
 }
