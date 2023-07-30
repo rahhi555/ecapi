@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ecapi_develop
+    driverClassName: org.postgresql.Driver
+    username: postgres
+    password: postgres
+logging:
+  level:
+    com:
+      example:
+        ecapi:
+          security:
+            user:
+              UserRepository: DEBUG

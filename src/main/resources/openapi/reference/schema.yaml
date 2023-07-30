@@ -5,13 +5,15 @@ info:
   title: PRUM EC APIスキーマ
   version: '1.0'
   description: PRUM ECのAPIスキーマです
-  contact: 
+  contact:
     name: rahhi555
 servers:
   - url: 'http://localhost:8080'
 tags:
   - name: opts
     description: 運用監視関連のAPI
+  - name: users
+    description: ユーザー関連のAPI
 paths:
   /health:
     get:
@@ -23,4 +25,65 @@ paths:
           description: OK
       operationId: healthCheck
       description: ヘルスチェック
-
+  /users/{id}:
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+        description: ユーザーid
+    get:
+      summary: ユーザー取得
+      tags:
+        - users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+      operationId: getUser
+      description: idからユーザーを取得する
+components:
+  schemas:
+    UserDTO:
+      title: UserDTO
+      x-stoplight:
+        id: 828a4c1d103a6
+      type: object
+      description: ユーザー情報
+      properties:
+        id:
+          type: integer
+          description: ユーザーid
+          example: 1
+        firstname:
+          type: string
+          description: 名前
+          example: 太郎
+          minLength: 1
+        lastname:
+          type: string
+          description: 名字
+          example: 太郎
+          minLength: 1
+        email:
+          type: string
+          description: メールアドレス
+          example: test@example.com
+          format: email
+        role:
+          type: string
+          description: 権限
+          example: VENDOR
+          enum:
+            - VENDOR
+            - CUSTOMER
+      required:
+        - id
+        - firstname
+        - lastname
+        - email
+        - role

@@ -1,0 +1,15 @@
+version: "3.1"
+
+services:
+  db:
+    image: postgres:15.3
+    volumes:
+      - ecapi_postgres_volume:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ecapi_develop
+    ports:
+      - "5432:5432"
+
+volumes:
+  ecapi_postgres_volume:
