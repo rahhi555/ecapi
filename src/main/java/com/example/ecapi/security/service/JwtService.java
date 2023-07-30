@@ -25,12 +25,12 @@ public class JwtService {
     private static final String SECRET_KEY = "TFUkQIk8gXB+35eyw+rEa44jgo/tvnDkNYwAUMWBHnE=";
 
     /**
-     * jwtから一意のユーザー名（email）取得
+     * jwtからユーザーid取得
      * @param token JWTの文字列
-     * @return tokenから取得したユーザー名
+     * @return tokenから取得したユーザーid
      */
-    public String extractUsername(String token) {
-        // jwtのsubjectは一意なユーザー名（本アプリにおいてはemail）
+    public String extractUserId(String token) {
+        // jwtのsubjectは一意なユーザー名（本アプリにおいてはid）
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -67,7 +67,7 @@ public class JwtService {
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername()) // 一意のユーザー名（email）
+                .setSubject(userDetails.getUsername()) // 一意のユーザー名（id）
                 .setIssuedAt(new Date(System.currentTimeMillis())) // 発行時刻
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24)) // 有効期限
                 .signWith(getSignInkey(), SignatureAlgorithm.HS256)
@@ -81,7 +81,7 @@ public class JwtService {
      * @return トークンが有効な場合はtrue、そうでない場合はfalse
      */
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
+        final String username = extractUserId(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 

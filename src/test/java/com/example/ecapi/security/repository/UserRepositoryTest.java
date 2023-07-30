@@ -1,6 +1,7 @@
 package com.example.ecapi.security.repository;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.example.ecapi.model.EnumRole;
@@ -25,15 +26,22 @@ public class UserRepositoryTest {
 
     @Test
     public void test_findByEmail() {
-        Optional<User> user = userRepository.findByEmail("test@example.com");
-        assertThat(user.get().getEmail()).isEqualTo("test@example.com");
+        User user = userRepository.findByEmail("test@example.com").orElseThrow();
+        assertThat(user.getEmail()).isEqualTo("test@example.com");
+    }
+
+    @Test
+    public void test_findByEmailAndRole() {
+        User user = userRepository.findByEmailAndRole("test@example.com", EnumRole.VENDOR).orElseThrow();
+        assertThat(user.getEmail()).isEqualTo("test@example.com");
+        assertThat(user.getRole()).isEqualTo(EnumRole.VENDOR);
     }
 
     @Test
     public void test_findById() {
-        int id = userRepository.findByEmail("test@example.com").get().getId();
-        Optional<User> user = userRepository.findById(id);
-        assertThat(user.get().getId()).isEqualTo(id);
+        int id = userRepository.findByEmail("test@example.com").orElseThrow().getId();
+        User user = userRepository.findById(id).orElseThrow();
+        assertThat(user.getId()).isEqualTo(id);
     }
 
     @Test
@@ -46,12 +54,12 @@ public class UserRepositoryTest {
                         .role(EnumRole.VENDOR)
                         .build();
         userRepository.save(newUser);
-        Optional<User> user = userRepository.findById(newUser.getId());
-        assertThat(user.get().getId()).isEqualTo(newUser.getId());
-        assertThat(user.get().getEmail()).isEqualTo(newUser.getEmail());
-        assertThat(user.get().getLastname()).isEqualTo(newUser.getLastname());
-        assertThat(user.get().getFirstname()).isEqualTo(newUser.getFirstname());
-        assertThat(user.get().getRole()).isEqualTo(newUser.getRole());
+        User user = userRepository.findById(newUser.getId()).orElseThrow();
+        assertThat(user.getId()).isEqualTo(newUser.getId());
+        assertThat(user.getEmail()).isEqualTo(newUser.getEmail());
+        assertThat(user.getLastname()).isEqualTo(newUser.getLastname());
+        assertThat(user.getFirstname()).isEqualTo(newUser.getFirstname());
+        assertThat(user.getRole()).isEqualTo(newUser.getRole());
     }
 
     @Test
@@ -63,17 +71,30 @@ public class UserRepositoryTest {
                 .lastname("newLastName")
                 .build();
         userRepository.save(newUser);
-        Optional<User> user = userRepository.findById(newUser.getId());
-        assertThat(user.get().getRole()).isEqualTo(EnumRole.CUSTOMER);
+        User user = userRepository.findById(newUser.getId()).orElseThrow();
+        assertThat(user.getRole()).isEqualTo(EnumRole.CUSTOMER);
     }
 
     @Test
-    public void test_save_同一のemailが存在する場合はエラーになること() {
+    public void test_save_異なるRoleの場合emailは重複可能であること() {
         User newUser = User.builder()
                 .email("test@example.com")
                 .password("password")
                 .firstname("newFirstName")
                 .lastname("newLastName")
+                .role(EnumRole.CUSTOMER)
+                .build();
+        assertDoesNotThrow(() -> userRepository.save(newUser));
+    }
+
+    @Test
+    public void test_save_同一のRoleの場合emailが重複不可であること() {
+        User newUser = User.builder()
+                .email("test@example.com")
+                .password("password")
+                .firstname("newFirstName")
+                .lastname("newLastName")
+                .role(EnumRole.VENDOR)
                 .build();
         assertThrows(DuplicateKeyException.class, () -> userRepository.save(newUser));
     }

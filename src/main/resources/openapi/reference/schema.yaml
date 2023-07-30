@@ -48,6 +48,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DTOUser'
+      security:
+        - BearerAuth: []
   /auth/register:
     post:
       summary: ユーザー登録
@@ -187,9 +189,12 @@ components:
           format: password
           example: password
           description: パスワード
+        role:
+          $ref: '#/components/schemas/EnumRole'
       required:
         - email
         - password
+        - role
     EnumRole:
       title: EnumRole
       x-stoplight:
@@ -201,3 +206,9 @@ components:
       default: CUSTOMER
       example: VENDOR
       description: 'ユーザー権限(販売者:VENDOR,購入者:CUSTOMER)'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: JWT認証
+      bearerFormat: JWT

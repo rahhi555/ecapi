@@ -50,15 +50,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         final String jwt = authHeader.substring(7);
-        final String userEmail = jwtService.extractUsername(jwt);
+        final String userId = jwtService.extractUserId(jwt);
 
         // jwtにユーザー名(Subjectのクレーム)が存在しない、またはSpringSecurityに既に認証情報が存在する
-        if (userEmail == null || SecurityContextHolder.getContext().getAuthentication() != null) {
+        if (userId == null || SecurityContextHolder.getContext().getAuthentication() != null) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+        UserDetails userDetails = this.userDetailsService.loadUserByUsername(userId);
 
         if (jwtService.isTokenValid(jwt, userDetails)) {
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

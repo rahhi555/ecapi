@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.assertj.core.api.Assertions.*;
 
 import com.example.ecapi.model.EnumRole;
+import com.example.ecapi.model.FormAuthenticate;
 import com.example.ecapi.model.FormRegister;
 import com.example.ecapi.security.User;
 import com.example.ecapi.security.repository.UserRepository;
@@ -59,10 +60,7 @@ public class AuthenticationControllerTest {
     void test_POST_auth_authenticate() throws Exception {
         var user = UserInsertOne.createVendor(authenticationService, userRepository);
 
-        AuthenticationRequest req = AuthenticationRequest.builder()
-                        .email(user.user().getEmail())
-                        .password(user.rawPassword())
-                        .build();
+        FormAuthenticate req = new FormAuthenticate(user.user().getEmail(), user.rawPassword(), user.user().getRole());
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(req);
 
