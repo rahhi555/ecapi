@@ -18,7 +18,8 @@ public class User implements UserDetails {
     private String email;
     private String password;
     private boolean enabled;
-    private Role role;
+    @Builder.Default
+    private Role role = Role.CUSTOMER;
 
 
     @Override

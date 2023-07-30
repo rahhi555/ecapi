@@ -19,9 +19,9 @@ public interface UserRepository {
     @Options(useGeneratedKeys = true, keyProperty = "id")
     @Insert("""
             INSERT INTO
-                users(firstname, lastname, email, password, enabled)
+                users(firstname, lastname, email, password, enabled, role)
             VALUES
-                (#{firstname}, #{lastname}, #{email}, #{password}, true)
+                (#{firstname}, #{lastname}, #{email}, #{password}, true, #{role}::role_enum)
             """)
     void save(User user);
 }

@@ -1,5 +1,6 @@
 package com.example.ecapi.security.controller;
 
+import com.example.ecapi.security.Role;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,5 +12,6 @@ public class RegisterRequest {
     private String lastname;
     private String email;
     private String password;
+    private Role role;
 
 }
