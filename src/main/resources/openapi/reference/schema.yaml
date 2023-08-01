@@ -16,6 +16,8 @@ tags:
     description: ユーザー関連のAPI
   - name: auth
     description: 認証関連のAPI
+  - name: products
+    description: 商品関連のAPI
 paths:
   /health:
     get:
@@ -88,6 +90,43 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/FormAuthenticate'
+  /products:
+    get:
+      summary: 商品一覧取得
+      tags:
+        - products
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DTOProduct'
+      operationId: getProducts
+      description: 商品一覧取得
+      security:
+        - BearerAuth: []
+    parameters: []
+    post:
+      summary: 商品登録
+      tags:
+        - products
+      operationId: addProduct
+      description: 商品登録
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FormProduct'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DTOProduct'
 components:
   schemas:
     DTOUser:
@@ -137,6 +176,70 @@ components:
         - token
       x-stoplight:
         id: 0aff6be78e7e3
+    DTOProduct:
+      title: DTOProduct
+      x-stoplight:
+        id: fpoef0hrvkk8o
+      type: object
+      description: 商品情報
+      properties:
+        id:
+          type: integer
+          description: 商品主キー
+          example: 1
+        vendor_id:
+          type: integer
+          description: 商品出品者の主キー
+          example: 1
+        name:
+          type: string
+          minLength: 1
+          example: Tシャツ
+          description: 商品名
+        description:
+          type: string
+          example: かっこいいTシャツです。
+          description: 商品説明
+        thumbnail_url:
+          type: string
+          format: uri
+          example: 'https://picsum.photos/200/300'
+          description: サムネイル画像URL
+        carousel_urls:
+          type: array
+          description: カルーセル画像URL配列
+          items:
+            type: string
+            format: uri
+            example: 'https://picsum.photos/200/300'
+        price:
+          type: integer
+          minimum: 0
+          example: 1000
+          description: 商品値段
+        stock:
+          type: integer
+          minimum: 0
+          example: 3
+          description: 在庫
+        created_at:
+          type: string
+          format: date-time
+          example: '2023-07-28T14:15:30.123+0900'
+          description: 作成日時
+        updated_at:
+          type: string
+          format: date-time
+          example: '2023-07-28T14:15:30.123+0900'
+          description: 更新日時
+      required:
+        - id
+        - vendor_id
+        - name
+        - price
+        - stock
+        - created_at
+        - updated_at
     FormRegister:
       title: FormRegister
       x-stoplight:
@@ -195,6 +298,53 @@ components:
         - email
         - password
         - role
+    FormProduct:
+      title: FormProduct
+      x-stoplight:
+        id: fc4de5426c90e
+      type: object
+      description: 商品登録フォーム
+      properties:
+        vendor_id:
+          type: integer
+          description: 商品出品者の主キー
+          example: 1
+        name:
+          type: string
+          minLength: 1
+          example: Tシャツ
+          description: 商品名
+        description:
+          type: string
+          example: かっこいいTシャツです。
+          description: 商品説明
+        thumbnail_url:
+          type: string
+          format: uri
+          example: 'https://picsum.photos/200/300'
+          description: サムネイル画像URL
+        carousel_urls:
+          type: array
+          description: カルーセル画像URL配列
+          items:
+            type: string
+            format: uri
+            example: 'https://picsum.photos/200/300'
+        price:
+          type: integer
+          minimum: 0
+          example: 1000
+          description: 商品値段
+        stock:
+          type: integer
+          example: 3
+          minimum: 0
+          description: 在庫
+      required:
+        - vendor_id
+        - name
+        - price
+        - stock
     EnumRole:
       title: EnumRole
       x-stoplight:
