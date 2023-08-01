@@ -14,10 +14,9 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 
 @SpringBootTest
-@Sql("UserRepositoryTest.sql")
+@Sql("/common/VendorInsertOne.sql")
 @Transactional
 public class UserRepositoryTest {
 

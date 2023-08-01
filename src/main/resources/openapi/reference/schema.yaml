@@ -101,7 +101,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DTOProduct'
+                type: array
+                items:
+                  $ref: '#/components/schemas/DTOProduct'
       operationId: getProducts
       description: 商品一覧取得
       security:
@@ -187,7 +189,7 @@ components:
           type: integer
           description: 商品主キー
           example: 1
-        vendor_id:
+        vendorId:
           type: integer
           description: 商品出品者の主キー
           example: 1
@@ -200,17 +202,15 @@ components:
           type: string
           example: かっこいいTシャツです。
           description: 商品説明
-        thumbnail_url:
+        thumbnailUrl:
           type: string
-          format: uri
           example: 'https://picsum.photos/200/300'
           description: サムネイル画像URL
-        carousel_urls:
+        carouselUrls:
           type: array
           description: カルーセル画像URL配列
           items:
             type: string
-            format: uri
             example: 'https://picsum.photos/200/300'
         price:
           type: integer
@@ -222,24 +222,24 @@ components:
           minimum: 0
           example: 3
           description: 在庫
-        created_at:
+        createdAt:
           type: string
           format: date-time
           example: '2023-07-28T14:15:30.123+0900'
           description: 作成日時
-        updated_at:
+        updatedAt:
           type: string
           format: date-time
           example: '2023-07-28T14:15:30.123+0900'
           description: 更新日時
       required:
         - id
-        - vendor_id
+        - vendorId
         - name
         - price
         - stock
-        - created_at
-        - updated_at
+        - createdAt
+        - updatedAt
     FormRegister:
       title: FormRegister
       x-stoplight:
@@ -305,7 +305,7 @@ components:
       type: object
       description: 商品登録フォーム
       properties:
-        vendor_id:
+        vendorId:
           type: integer
           description: 商品出品者の主キー
           example: 1
@@ -318,17 +318,15 @@ components:
           type: string
           example: かっこいいTシャツです。
           description: 商品説明
-        thumbnail_url:
+        thumbnailUrl:
           type: string
-          format: uri
           example: 'https://picsum.photos/200/300'
           description: サムネイル画像URL
-        carousel_urls:
+        carouselUrls:
           type: array
           description: カルーセル画像URL配列
           items:
             type: string
-            format: uri
             example: 'https://picsum.photos/200/300'
         price:
           type: integer
@@ -341,7 +339,7 @@ components:
           minimum: 0
           description: 在庫
       required:
-        - vendor_id
+        - vendorId
         - name
         - price
         - stock

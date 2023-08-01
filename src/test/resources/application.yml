@@ -4,3 +4,7 @@ spring:
     driverClassName: org.postgresql.Driver
     username: postgres
     password: postgres
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  type-aliases-package: com.github.onozaty.mybatis.pg.type.list
