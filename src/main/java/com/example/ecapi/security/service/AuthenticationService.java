@@ -1,10 +1,9 @@
 package com.example.ecapi.security.service;
 
-import com.example.ecapi.model.DTOAuthentication;
-import com.example.ecapi.model.FormAuthenticate;
-import com.example.ecapi.model.FormRegister;
+import com.example.ecapi.model.*;
 import com.example.ecapi.security.*;
 import com.example.ecapi.security.repository.UserRepository;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,7 +36,7 @@ public class AuthenticationService {
         return new DTOAuthentication(jwtToken);
     }
 
-    public DTOAuthentication authenticate(FormAuthenticate request) {
+    public DTOLogin authenticate(FormAuthenticate request) {
         User user = repository.findByEmailAndRole(request.getEmail(), request.getRole())
                 .orElseThrow();
         authenticationManager.authenticate(
@@ -47,7 +46,12 @@ public class AuthenticationService {
                 )
         );
         String jwtToken = jwtService.generateToken(user);
-        return new DTOAuthentication(jwtToken);
+
+        DTOUser dtoUser = new DTOUser(
+                user.getId(),user.getFirstname(),user.getLastname(),user.getEmail(),user.getRole()
+        );
+        DTOAuthentication auth = new DTOAuthentication(jwtToken);
+        return new DTOLogin(auth, dtoUser);
     }
 
 }

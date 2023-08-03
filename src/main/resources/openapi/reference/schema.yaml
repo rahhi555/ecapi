@@ -52,7 +52,7 @@ paths:
                 $ref: '#/components/schemas/DTOUser'
       security:
         - BearerAuth: []
-  '/users/me':
+  /users/me:
     get:
       summary: ログイン中ユーザー取得
       tags:
@@ -98,7 +98,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DTOAuthentication'
+                $ref: '#/components/schemas/DTOLogin'
       tags:
         - auth
       description: ログイン
@@ -197,6 +197,18 @@ components:
         - token
       x-stoplight:
         id: 0aff6be78e7e3
+    DTOLogin:
+      title: DTOLogin
+      description: 認証jwtおよびユーザー情報
+      type: object
+      properties:
+        token:
+          $ref: '#/components/schemas/DTOAuthentication'
+        user:
+          $ref: '#/components/schemas/DTOUser'
+      required:
+        - token
+        - user
     DTOProduct:
       title: DTOProduct
       x-stoplight:

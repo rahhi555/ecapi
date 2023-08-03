@@ -2,6 +2,7 @@ package com.example.ecapi.security.controller;
 
 import com.example.ecapi.controller.AuthApi;
 import com.example.ecapi.model.DTOAuthentication;
+import com.example.ecapi.model.DTOLogin;
 import com.example.ecapi.model.FormAuthenticate;
 import com.example.ecapi.model.FormRegister;
 import com.example.ecapi.security.service.AuthenticationService;
@@ -24,7 +25,7 @@ public class AuthenticationController implements AuthApi {
     }
 
     @Override
-    public ResponseEntity<DTOAuthentication> login(FormAuthenticate formAuthenticate) {
+    public ResponseEntity<DTOLogin> login(FormAuthenticate formAuthenticate) {
         return ResponseEntity.ok(service.authenticate(formAuthenticate));
     }
 }
