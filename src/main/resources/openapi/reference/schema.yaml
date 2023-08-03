@@ -52,6 +52,22 @@ paths:
                 $ref: '#/components/schemas/DTOUser'
       security:
         - BearerAuth: []
+  '/users/me':
+    get:
+      summary: ログイン中ユーザー取得
+      tags:
+        - users
+      operationId: getMe
+      description: ログイン中のユーザーを取得する
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DTOUser"
   /auth/register:
     post:
       summary: ユーザー登録
@@ -64,6 +80,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/FormRegister'
+        required: true
       responses:
         '200':
           description: OK
@@ -90,6 +107,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/FormAuthenticate'
+        required: true
   /products:
     get:
       summary: 商品一覧取得
@@ -122,6 +140,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/FormProduct'
+        required: true
       responses:
         '201':
           description: Created

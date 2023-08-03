@@ -37,8 +37,8 @@ public class UserController implements UsersApi {
         return ResponseEntity.ok(DTOUser);
     }
 
-    @GetMapping("/users/me")
-    public ResponseEntity<DTOUser> me() {
+    @Override
+    public ResponseEntity<DTOUser> getMe() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         DTOUser DTOUser = new DTOUser(

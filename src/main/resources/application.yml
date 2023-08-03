@@ -8,6 +8,8 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
   type-aliases-package: com.github.onozaty.mybatis.pg.type.list
+cors:
+  allowedOrigins: http://localhost:5173
 logging:
   level:
     com:
