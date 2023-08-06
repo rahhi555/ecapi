@@ -50,8 +50,7 @@ public class AuthenticationService {
         DTOUser dtoUser = new DTOUser(
                 user.getId(),user.getFirstname(),user.getLastname(),user.getEmail(),user.getRole()
         );
-        DTOAuthentication auth = new DTOAuthentication(jwtToken);
-        return new DTOLogin(auth, dtoUser);
+        return new DTOLogin(jwtToken, dtoUser);
     }
 
 }

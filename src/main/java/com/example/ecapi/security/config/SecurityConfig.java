@@ -1,6 +1,8 @@
 package com.example.ecapi.security.config;
 
+import com.example.ecapi.security.CustomAuthenticationEntryPoint;
 import com.example.ecapi.security.JwtAuthenticationFilter;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -18,10 +20,15 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthFilter, AuthenticationProvider authenticationProvider) {
+    public SecurityConfig(
+            JwtAuthenticationFilter jwtAuthFilter,
+            AuthenticationProvider authenticationProvider,
+            CustomAuthenticationEntryPoint customAuthenticationEntryPoint) {
         this.jwtAuthFilter = jwtAuthFilter;
         this.authenticationProvider = authenticationProvider;
+        this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
     }
 
     @Bean
@@ -32,8 +39,7 @@ public class SecurityConfig {
                                 authorizeHttpRequests
                                         .requestMatchers(
                                                 new AntPathRequestMatcher("/health", "GET"),
-                                                new AntPathRequestMatcher("/auth/**")
-                                        )
+                                                new AntPathRequestMatcher("/auth/**"))
                                         .permitAll()
                                         .anyRequest()
                                         .authenticated())
@@ -42,6 +48,10 @@ public class SecurityConfig {
                                 sessionManagement.sessionCreationPolicy(
                                         SessionCreationPolicy.STATELESS) // セッション無効化
                         )
+                .exceptionHandling(
+                        exceptionHandling ->
+                                exceptionHandling.authenticationEntryPoint(
+                                        customAuthenticationEntryPoint))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

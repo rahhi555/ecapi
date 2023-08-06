@@ -67,7 +67,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DTOUser"
+                $ref: '#/components/schemas/DTOUser'
   /auth/register:
     post:
       summary: ユーザー登録
@@ -99,6 +99,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DTOLogin'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBase'
       tags:
         - auth
       description: ログイン
@@ -198,12 +204,13 @@ components:
       x-stoplight:
         id: 0aff6be78e7e3
     DTOLogin:
-      title: DTOLogin
-      description: 認証jwtおよびユーザー情報
+      description: ログイン情報
       type: object
       properties:
         token:
-          $ref: '#/components/schemas/DTOAuthentication'
+          type: string
+          example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2ZW5kb3JAZXhhbXBsZS5jb20iLCJpYXQiOjE2OTA3MjAyNjUsImV4cCI6MTY5MDcyMTcwNX0.OG9PfPsWsnqgqu-HDA5tGtXZd98UgMayrpq6ObBbSNA
+          description: 認証jwt
         user:
           $ref: '#/components/schemas/DTOUser'
       required:
@@ -316,11 +323,13 @@ components:
         email:
           type: string
           format: email
+          minLength: 1
           example: test@example.com
           description: メールアドレス
         password:
           type: string
           format: password
+          minLength: 1
           example: password
           description: パスワード
         role:
@@ -385,6 +394,39 @@ components:
       default: CUSTOMER
       example: VENDOR
       description: 'ユーザー権限(販売者:VENDOR,購入者:CUSTOMER)'
+    ErrorBase:
+      title: ErrorBase
+      description: エラーレスポンス
+      type: object
+      properties:
+        title:
+          type: string
+          description: エラーのタイトル
+          example: Bad Request
+        detail:
+          type: string
+          description: エラーの詳細
+          example: リクエストが不正です。正しいリクエストでリトライしてください
+        invalidParams:
+          type: array
+          items:
+            description: 不正なリクエストについての詳細
+            type: object
+            properties:
+              name:
+                type: string
+                description: エラーが発生したフィールド名
+                example: title
+              reason:
+                type: string
+                description: エラー詳細
+                example: 値が空白です
+            required:
+              - name
+              - reason
+      required:
+        - title
+        - detail
   securitySchemes:
     BearerAuth:
       type: http

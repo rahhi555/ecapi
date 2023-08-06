@@ -41,11 +41,11 @@ public class UserControllerTest {
     }
 
     @Test
-    void test_getUser_Bearer無しは403エラーが返ってくること() throws Exception {
+    void test_getUser_Bearer無しは401エラーが返ってくること() throws Exception {
         var user = UserInsertOne.createVendor(authenticationService, userRepository);
 
         mockMvc.perform(get("/users/{id}", user.user().getId()))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
@@ -61,10 +61,10 @@ public class UserControllerTest {
     }
 
     @Test
-    void test_me_Bearer無しは403エラーが返ってくること() throws Exception {
-        var user = UserInsertOne.createVendor(authenticationService, userRepository);
+    void test_me_Bearer無しは401エラーが返ってくること() throws Exception {
+        UserInsertOne.createVendor(authenticationService, userRepository);
 
         mockMvc.perform(get("/users/me"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
     }
 }
