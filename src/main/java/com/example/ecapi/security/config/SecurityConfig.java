@@ -13,6 +13,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -34,6 +37,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable) // セッションを使用しないのでCSRF無効化
+                .cors(
+                        cors ->
+                                cors.configurationSource(
+                                        request -> {
+                                            var conf = new CorsConfiguration();
+                                            conf.setAllowedOrigins(List.of("*"));
+                                            conf.setAllowedHeaders(List.of("*"));
+                                            conf.setAllowedMethods(List.of("*"));
+                                            return conf;
+                                        }))
                 .authorizeHttpRequests(
                         authorizeHttpRequests ->
                                 authorizeHttpRequests

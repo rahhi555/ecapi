@@ -247,9 +247,7 @@ components:
         carouselUrls:
           type: array
           description: カルーセル画像URL配列
-          items:
-            type: string
-            example: 'https://picsum.photos/200/300'
+          items: {}
         price:
           type: integer
           minimum: 0
@@ -274,6 +272,9 @@ components:
         - id
         - vendorId
         - name
+        - description
+        - thumbnailUrl
+        - carouselUrls
         - price
         - stock
         - createdAt
