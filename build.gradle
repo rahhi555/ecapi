@@ -37,6 +37,8 @@ dependencies {
 	// javax.annotation.meta.Whenのクラス・ファイルが見つかりません 解消のため導入
 	implementation 'com.google.code.findbugs:jsr305:3.0.2'
 	implementation 'com.github.onozaty:mybatis-postgresql-typehandlers:1.0.2'
+	implementation platform('software.amazon.awssdk:bom:2.20.56')
+	implementation 'software.amazon.awssdk:s3'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'

@@ -154,6 +154,39 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DTOProduct'
+  '/products/{id}/thumbnail':
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+    post:
+      summary: 商品登録
+      tags:
+        - products
+      operationId: addProductThumbnail
+      description: 商品サムネイル画像登録
+      security:
+        - BearerAuth: []
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DTOProduct'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBase'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FormFileUpload'
 components:
   schemas:
     DTOUser:
@@ -384,6 +417,19 @@ components:
         - name
         - price
         - stock
+    FormFileUpload:
+      title: FormFileUpload
+      x-stoplight:
+        id: 08240f4873683
+      type: object
+      description: ファイルアップロード
+      properties:
+        file:
+          type: string
+          format: binary
+          description: アップロードするファイル
+      required:
+        - file
     EnumRole:
       title: EnumRole
       x-stoplight:

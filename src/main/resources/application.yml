@@ -8,6 +8,10 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+aws:
+  s3:
+    buckets:
+      products: ecapi-products
 mybatis:
   configuration:
     map-underscore-to-camel-case: true

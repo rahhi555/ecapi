@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface ProductRepository {
@@ -20,6 +21,22 @@ public interface ProductRepository {
             """)
     @Result(column = "carousel_urls", property = "carouselUrls", typeHandler = StringListTypeHandler.class)
     DTOProduct insert(FormProduct product);
+
+    @Select("SELECT * FROM products WHERE id = #{id}")
+    @Result(column = "carousel_urls", property = "carouselUrls", typeHandler = StringListTypeHandler.class)
+    Optional<DTOProduct> select(Integer id);
+
+    @Select("""
+            UPDATE
+                products
+            SET
+                thumbnail_url = #{thumbnailUrl}
+            WHERE
+                id = #{id}
+            RETURNING *;
+            """)
+    @Result(column = "carousel_urls", property = "carouselUrls", typeHandler = StringListTypeHandler.class)
+    DTOProduct updateThumbnail(Integer id, String thumbnailUrl);
 
     @Select("SELECT * FROM products ORDER BY created_at DESC")
     @Result(column = "carousel_urls", property = "carouselUrls", typeHandler = StringListTypeHandler.class)
