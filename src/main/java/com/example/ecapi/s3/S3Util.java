@@ -22,7 +22,7 @@ public class S3Util {
                 .key(key)
                 .build();
         s3Client.putObject(objectRequest, RequestBody.fromBytes(file));
-        return "https://" + bucketName + "ap-northeast-1.amazonaws.com/" + key;
+        return "https://" + bucketName + ".s3.ap-northeast-1.amazonaws.com/" + key;
     }
 
 }
