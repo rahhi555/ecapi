@@ -3,6 +3,7 @@ package com.example.ecapi.security.config;
 import com.example.ecapi.security.CustomAuthenticationEntryPoint;
 import com.example.ecapi.security.JwtAuthenticationFilter;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -24,6 +25,8 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    @Value("${cors.allowedOrigins}")
+    private String allowedOrigins;
 
     public SecurityConfig(
             JwtAuthenticationFilter jwtAuthFilter,
@@ -42,7 +45,7 @@ public class SecurityConfig {
                                 cors.configurationSource(
                                         request -> {
                                             var conf = new CorsConfiguration();
-                                            conf.setAllowedOrigins(List.of("*"));
+                                            conf.setAllowedOrigins(List.of(allowedOrigins));
                                             conf.setAllowedHeaders(List.of("*"));
                                             conf.setAllowedMethods(List.of("*"));
                                             return conf;
